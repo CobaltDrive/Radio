@@ -5,15 +5,66 @@ import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 
 
-function Card({ children, className = "" }) {
+type BasicProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+type ButtonProps = BasicProps & {
+  variant?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+type IconProps = {
+  name: string;
+  className?: string;
+};
+
+type BrandWordmarkProps = {
+  size?: "small" | "medium" | "large";
+  centered?: boolean;
+};
+
+type LiveAudioPlayerProps = {
+  streamUrl: string;
+};
+
+type SongArtPanelProps = {
+  src: string;
+};
+
+type NowPlayingInfo = {
+  title: string;
+  artist: string;
+  art: string;
+};
+
+type RecentTrack = {
+  id: string;
+  title: string;
+  artist: string;
+  art: string;
+};
+
+type StationCard = {
+  icon: string;
+  title: string;
+  text: string;
+};
+
+type JinglePhrase = [string, string];
+
+function Card({ children, className = "" }: BasicProps) {
   return <div className={className}>{children}</div>;
 }
 
-function CardContent({ children, className = "" }) {
+function CardContent({ children, className = "" }: BasicProps) {
   return <div className={className}>{children}</div>;
 }
 
-function Button({ children, className = "", variant, type = "button", disabled = false, onClick }) {
+function Button({ children, className = "", type = "button", disabled = false, onClick }: ButtonProps) {
   return (
     <button
       type={type}
@@ -55,78 +106,84 @@ const TEST_TAGLINES = [
   "Echoes of the Open Road",
 ];
 
-function Icon({ name, className = "" }) {
-  const common = {
-    className,
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2,
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true",
-  };
+function SvgIcon({ className = "", children }: BasicProps) {
+  return (
+    <svg
+      className={className}
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  );
+}
 
-  const icons = {
+function Icon({ name, className = "" }: IconProps) {
+  const icons: Record<string, React.ReactNode> = {
     play: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <polygon points="6 3 20 12 6 21 6 3" />
-      </svg>
+      </SvgIcon>
     ),
     radio: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <path d="M4.9 19.1a10 10 0 0 1 14.2 0" />
         <path d="M7.8 16.2a6 6 0 0 1 8.4 0" />
         <circle cx="12" cy="12" r="2" />
         <path d="M12 6v1" />
-      </svg>
+      </SvgIcon>
     ),
     moon: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8Z" />
-      </svg>
+      </SvgIcon>
     ),
     music: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <path d="M9 18V5l12-2v13" />
         <circle cx="6" cy="18" r="3" />
         <circle cx="18" cy="16" r="3" />
-      </svg>
+      </SvgIcon>
     ),
     pin: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
         <circle cx="12" cy="10" r="3" />
-      </svg>
+      </SvgIcon>
     ),
     headphones: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
         <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5Z" />
         <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5Z" />
-      </svg>
+      </SvgIcon>
     ),
     mail: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <rect x="3" y="5" width="18" height="14" rx="2" />
         <path d="m3 7 9 6 9-6" />
-      </svg>
+      </SvgIcon>
     ),
     volume: (
-      <svg {...common}>
+      <SvgIcon className={className}>
         <path d="M11 5 6 9H3v6h3l5 4V5Z" />
         <path d="M16 9a5 5 0 0 1 0 6" />
         <path d="M19 6a9 9 0 0 1 0 12" />
-      </svg>
+      </SvgIcon>
     ),
   };
 
   return icons[name] || icons.radio;
 }
 
-function BrandWordmark({ size = "large", centered = false }) {
+function BrandWordmark({ size = "large", centered = false }: BrandWordmarkProps) {
   const cobaltSize = size === "small" ? "text-4xl" : size === "medium" ? "text-5xl md:text-7xl" : "text-6xl md:text-8xl";
   const driveSize = size === "small" ? "text-2xl" : size === "medium" ? "text-4xl md:text-6xl" : "text-5xl md:text-7xl";
   const radioSize = size === "small" ? "text-sm" : size === "medium" ? "text-xl md:text-2xl" : "text-2xl md:text-3xl";
@@ -161,7 +218,7 @@ function BrandWordmark({ size = "large", centered = false }) {
   );
 }
 
-function LiveAudioPlayer({ streamUrl }) {
+function LiveAudioPlayer({ streamUrl }: LiveAudioPlayerProps) {
   return (
     <audio controls preload="none" className="w-full">
       <source src={streamUrl} type="audio/mpeg" />
@@ -170,7 +227,7 @@ function LiveAudioPlayer({ streamUrl }) {
   );
 }
 
-function SongArtPanel({ src }) {
+function SongArtPanel({ src }: SongArtPanelProps) {
   const [imageFailed, setImageFailed] = useState(false);
 
   useEffect(() => {
@@ -195,19 +252,19 @@ function SongArtPanel({ src }) {
   );
 }
 
-export function getTaglineByIndex(index, taglines = TEST_TAGLINES) {
+export function getTaglineByIndex(index: number, taglines: string[] = TEST_TAGLINES) {
   if (!Array.isArray(taglines) || taglines.length === 0) return "";
   const safeIndex = ((index % taglines.length) + taglines.length) % taglines.length;
   return taglines[safeIndex];
 }
 
-export function getSongArtByIndex(index, songArt = SONG_ART_PLACEHOLDERS) {
+export function getSongArtByIndex(index: number, songArt: string[] = SONG_ART_PLACEHOLDERS) {
   if (!Array.isArray(songArt) || songArt.length === 0) return "";
   const safeIndex = ((index % songArt.length) + songArt.length) % songArt.length;
   return songArt[safeIndex];
 }
 
-export function normalizeNowPlayingData(data, fallbackArt = getSongArtByIndex(0)) {
+export function normalizeNowPlayingData(data: any, fallbackArt: string = getSongArtByIndex(0)): NowPlayingInfo | null {
   const azuraSong = data?.now_playing?.song;
   const icecastSource = Array.isArray(data?.icestats?.source)
     ? data.icestats.source[0]
@@ -236,10 +293,18 @@ export function normalizeNowPlayingData(data, fallbackArt = getSongArtByIndex(0)
   return null;
 }
 
-export function normalizeRecentTracks(data) {
-  const history = Array.isArray(data?.song_history) ? data.song_history : [];
+type SongHistoryItem = {
+  song?: {
+    title?: string;
+    artist?: string;
+    art?: string;
+  };
+};
 
-  return history.slice(0, 6).map((item, index) => {
+export function normalizeRecentTracks(data: any): RecentTrack[] {
+  const history: SongHistoryItem[] = Array.isArray(data?.song_history) ? data.song_history : [];
+
+  return history.slice(0, 6).map((item: SongHistoryItem, index: number) => {
     const song = item?.song || {};
 
     return {
@@ -294,7 +359,7 @@ function ContactForm() {
 
   const [status, setStatus] = useState("idle");
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     try {
@@ -393,7 +458,7 @@ export default function CobaltDriveRadio() {
     artist: "Live Stream",
     art: getSongArtByIndex(0),
   });
-  const [recentTracks, setRecentTracks] = useState([]);
+  const [recentTracks, setRecentTracks] = useState<RecentTrack[]>([]);
 
   const config = CONFIG;
   const taglines = useMemo(() => TEST_TAGLINES, []);
@@ -434,7 +499,7 @@ export default function CobaltDriveRadio() {
     };
   }, [config.nowPlayingApis, taglineIndex]);
 
-  const stationCards = [
+  const stationCards: StationCard[] = [
     {
       icon: "headphones",
       title: "The Sound",
@@ -452,7 +517,7 @@ export default function CobaltDriveRadio() {
     },
   ];
 
-  const jinglePhrases = [
+  const jinglePhrases: JinglePhrase[] = [
     ["Memories in Motion", "Core identity — movement, nostalgia, and emotional continuity."],
     ["Songs for the Long Way Home", "The heart phrase — reflective, warm, and companionable."],
     ["The Smooth Lane Home", "The texture phrase — occasional, relaxed, and polished."],
@@ -548,11 +613,11 @@ export default function CobaltDriveRadio() {
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
-            {(recentTracks.length > 0 ? recentTracks : [
+            {(recentTracks.length > 0 ? recentTracks : ([
               { id: "fallback-1", title: "Recent tracks will appear here", artist: "When AzuraCast song history is available", art: getSongArtByIndex(0) },
               { id: "fallback-2", title: "Live stream connected", artist: "Metadata updates every 15 seconds", art: getSongArtByIndex(1) },
               { id: "fallback-3", title: "Cobalt Drive Radio", artist: "Memories in Motion", art: getSongArtByIndex(2) },
-            ]).map((track) => (
+            ] as RecentTrack[])).map((track: RecentTrack) => (
               <Card key={track.id} className="overflow-hidden rounded-3xl border-slate-800 bg-slate-900/70 shadow-xl">
                 <CardContent className="p-0">
                   <div className="aspect-square bg-slate-950">
@@ -580,7 +645,7 @@ export default function CobaltDriveRadio() {
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
-            {stationCards.map((item) => (
+            {stationCards.map((item: StationCard) => (
               <Card key={item.title} className="rounded-3xl border-slate-800 bg-slate-900/70 shadow-xl">
                 <CardContent className="space-y-4 p-7">
                   <Icon name={item.icon} className="h-8 w-8 text-cyan-300" />
@@ -604,7 +669,7 @@ export default function CobaltDriveRadio() {
           </div>
 
           <div className="space-y-4">
-            {jinglePhrases.map(([title, text]) => (
+            {jinglePhrases.map(([title, text]: JinglePhrase) => (
               <div key={title} className="rounded-3xl border border-slate-700 bg-slate-950/55 p-6">
                 <h3 className="text-xl font-semibold text-cyan-100">{title}</h3>
                 <p className="mt-2 text-slate-400">{text}</p>
