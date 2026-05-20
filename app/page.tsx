@@ -686,6 +686,7 @@ export default function CobaltDriveRadio() {
           <p className="text-lg uppercase tracking-[0.35em] text-cyan-300/80">
             Live from Kokomo, Indiana
           </p>
+
           <div className="flex flex-wrap justify-center gap-3">
             <a href={config.streamUrl} target="_blank" rel="noopener noreferrer">
               <Button className="rounded-2xl bg-cyan-300 px-6 py-6 text-slate-950 hover:bg-cyan-200">
@@ -694,20 +695,28 @@ export default function CobaltDriveRadio() {
             </a>
           </div>
 
-          <div className="mx-auto mt-10 max-w-md rounded-[2rem] border border-cyan-300/20 bg-slate-900/70 p-6 shadow-2xl shadow-cyan-950/30">
+          <div className="mx-auto mt-10 max-w-2xl rounded-[2rem] border border-cyan-300/20 bg-slate-900/70 p-6 shadow-2xl shadow-cyan-950/30">
             <div className="mb-4 text-sm uppercase tracking-[0.3em] text-cyan-300">
-              Support the Signal.
+              Listener Supported
             </div>
 
-            <img
-              src="/paypal-qr.png"
-              alt="PayPal Donation QR Code"
-              className="mx-auto h-56 w-56 rounded-2xl border border-slate-700 bg-white p-2"
-            />
-
-            <p className="mt-5 text-sm leading-relaxed text-slate-400">
-              If Cobalt Drive Radio keeps you company on the long road home, you can help keep the station alive.
+            <p className="mb-6 text-sm leading-relaxed text-slate-400">
+              If Cobalt Drive Radio keeps you company somewhere out there past midnight, you can help keep the signal alive.
             </p>
+
+            <div className="overflow-hidden rounded-2xl border border-slate-700 bg-slate-950/60 p-2">
+              <iframe
+                id="kofiframe"
+                src="https://ko-fi.com/kevinvail/?hidefeed=true&widget=true&embed=true&preview=true"
+                style={{
+                  border: "none",
+                  width: "100%",
+                  background: "transparent",
+                }}
+                height="712"
+                title="Cobalt Drive Radio Support"
+              />
+            </div>
           </div>
 
           <div className="pt-10">
